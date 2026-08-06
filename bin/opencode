@@ -2,8 +2,14 @@
 set -o pipefail
 export OPENCODE_DISABLE_AUTOUPDATE=1
 
-export HOME="${HOME:-/data/data/com.termux/files/home}"
-export PREFIX="${PREFIX:-/data/data/com.termux/files/usr}"
+if [ -z "${PREFIX:-}" ]; then
+  if [ -d /data/user/0/com.termux/files/usr ]; then
+    export PREFIX=/data/user/0/com.termux/files/usr
+  else
+    export PREFIX=/data/data/com.termux/files/usr
+  fi
+fi
+export HOME="${HOME:-$(dirname "$PREFIX")/home}"
 export PATH="$PREFIX/bin:$PATH"
 export LD_LIBRARY_PATH="$PREFIX/lib"
 export TMPDIR="${TMPDIR:-$PREFIX/tmp}"
@@ -26,7 +32,7 @@ install_opencode() {
   node "$DIR/install.js"
 }
 
-if [ ! -f /data/data/com.termux/files/usr/etc/tls/cert.pem ] || [ ! -f /data/data/com.termux/files/usr/etc/resolv.conf ] || ! command -v timeout >/dev/null 2>&1; then
+if [ ! -f "$PREFIX/etc/tls/cert.pem" ] || [ ! -f "$PREFIX/etc/resolv.conf" ] || ! command -v timeout >/dev/null 2>&1; then
   node "$DIR/install.js" --ensure-dependencies || exit $?
 fi
 
@@ -36,6 +42,6 @@ fi
 
 export LD_PRELOAD="$OPENCODE_DIR/ld-musl-aarch64.so.1"
 export LD_LIBRARY_PATH="$OPENCODE_DIR:$LD_LIBRARY_PATH"
-export SSL_CERT_FILE=/data/data/com.termux/files/usr/etc/tls/cert.pem
+export SSL_CERT_FILE="$PREFIX/etc/tls/cert.pem"
 
 exec "$OPENCODE_DIR/opencode" "$@"

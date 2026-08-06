@@ -8,8 +8,6 @@ const path = require("path");
 const { version: VERSION } = require("./package.json");
 const { archiveSha256, version: checksumVersion } = require("./release-checksums.json");
 const HOME = process.env.HOME;
-const CERTIFICATE_FILE = "/data/data/com.termux/files/usr/etc/tls/cert.pem";
-const RESOLVER_FILE = "/data/data/com.termux/files/usr/etc/resolv.conf";
 const REQUIRED_FILES = [
   "opencode",
   "ld-musl-aarch64.so.1",
@@ -18,6 +16,20 @@ const REQUIRED_FILES = [
   "libstdc++.so.6",
   "libstdc++.so.6.0.33",
 ];
+
+function resolveTermuxPrefix() {
+  const candidates = [process.env.PREFIX, "/data/data/com.termux/files/usr", "/data/user/0/com.termux/files/usr"].filter(Boolean);
+  for (const candidate of candidates) {
+    try {
+      if (fs.statSync(candidate).isDirectory()) return candidate;
+    } catch (_) {}
+  }
+  return "/data/data/com.termux/files/usr";
+}
+
+const TERMUX_PREFIX = resolveTermuxPrefix();
+const CERTIFICATE_FILE = path.join(TERMUX_PREFIX, "etc/tls/cert.pem");
+const RESOLVER_FILE = path.join(TERMUX_PREFIX, "etc/resolv.conf");
 
 function message(text) {
   process.stdout.write(`  ◇ ${text}\n`);

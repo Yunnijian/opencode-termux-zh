@@ -7,8 +7,14 @@ set -euo pipefail
 # Usage:
 #   bash -c "$(curl -fsSL https://raw.githubusercontent.com/Yunnijian/opencode-termux-zh/main/install.sh)"
 
-export PREFIX="${PREFIX:-/data/data/com.termux/files/usr}"
-export HOME="${HOME:-/data/data/com.termux/files/home}"
+if [ -z "${PREFIX:-}" ]; then
+  if [ -d /data/user/0/com.termux/files/usr ]; then
+    export PREFIX=/data/user/0/com.termux/files/usr
+  else
+    export PREFIX=/data/data/com.termux/files/usr
+  fi
+fi
+export HOME="${HOME:-$(dirname "$PREFIX")/home}"
 export PATH="$PREFIX/bin:$PATH"
 export LD_LIBRARY_PATH="$PREFIX/lib"
 export TMPDIR="${TMPDIR:-$PREFIX/tmp}"

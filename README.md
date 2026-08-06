@@ -37,7 +37,7 @@ Chinese plugin automatically.
 If Termux is installed on an adb-connected device, run:
 
 ```bash
-adb shell su -c 'PREFIX=/data/data/com.termux/files/usr; UID=$(stat -c %u $PREFIX/..); curl -fsSL https://raw.githubusercontent.com/Yunnijian/opencode-termux-zh/main/install.sh -o /data/local/tmp/opencode-zh-install.sh; su -g $UID -G 3003 $UID -c "env PREFIX=$PREFIX HOME=$PREFIX/../home PATH=$PREFIX/bin:/system/bin LD_LIBRARY_PATH=$PREFIX/lib TMPDIR=$PREFIX/tmp $PREFIX/bin/bash /data/local/tmp/opencode-zh-install.sh"'
+adb shell su -c 'PREFIX=$(ls -d /data/user/0/com.termux/files/usr /data/data/com.termux/files/usr 2>/dev/null | head -1); UID=$(stat -c %u $PREFIX/..); curl -fsSL https://raw.githubusercontent.com/Yunnijian/opencode-termux-zh/main/install.sh -o /data/local/tmp/opencode-zh-install.sh; su -g $UID -G 3003 $UID -c "env PREFIX=$PREFIX HOME=$PREFIX/../home PATH=$PREFIX/bin:/system/bin LD_LIBRARY_PATH=$PREFIX/lib TMPDIR=$PREFIX/tmp $PREFIX/bin/bash /data/local/tmp/opencode-zh-install.sh"'
 ```
 
 The `-G 3003` (`inet`) group is required for DNS/network access on Android;
