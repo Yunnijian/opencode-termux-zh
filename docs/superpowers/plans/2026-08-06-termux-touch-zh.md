@@ -226,7 +226,9 @@ EOF
 chmod +x "$FAKE"
 
 # Success path
-RECORD_FILE="$TMP/args" FAKE_EXIT=0 OPENCODE_BIN="$FAKE" XDG_CONFIG_HOME="$TMP/xdg" \
+RECORD_FILE="$TMP/args"
+export RECORD_FILE
+FAKE_EXIT=0 OPENCODE_BIN="$FAKE" XDG_CONFIG_HOME="$TMP/xdg" \
   "$SCRIPT_DIR/install-zh-plugin.sh" >/dev/null 2>&1 || FAIL=1
 if [ ! -f "$RECORD_FILE" ]; then
   echo "FAIL: success path did not invoke opencode" >&2
@@ -242,7 +244,9 @@ if [ ! -f "$TMP/xdg/opencode/opencode.json" ]; then
 fi
 
 # Failure path: fake exits 1; installer must still exit 0 and warn
-RECORD_FILE="$TMP/args2" FAKE_EXIT=1 OPENCODE_BIN="$FAKE" XDG_CONFIG_HOME="$TMP/xdg2" \
+RECORD_FILE="$TMP/args2"
+export RECORD_FILE
+FAKE_EXIT=1 OPENCODE_BIN="$FAKE" XDG_CONFIG_HOME="$TMP/xdg2" \
   "$SCRIPT_DIR/install-zh-plugin.sh" >/dev/null 2>"$TMP/err.log" || FAIL=1
 if ! grep -q 'failed to install opencode-zh-plugin' "$TMP/err.log"; then
   echo "FAIL: failure path should warn" >&2
@@ -293,6 +297,12 @@ if ! "$OPENCODE_BIN" plugin opencode-zh-plugin --global; then
 fi
 ```
 
+Then make the new scripts executable:
+
+```bash
+chmod +x scripts/install-zh-plugin.sh scripts/test-install-zh-plugin.sh
+```
+
 - [ ] **Step 4: Run the test to verify it passes**
 
 Run: `bash scripts/test-install-zh-plugin.sh`
@@ -341,8 +351,12 @@ Run:
 
 ```bash
 TMP="$(mktemp -d "$HOME/oc-plugin-check-XXXXXX")"
-XDG_CONFIG_HOME="$TMP/.config" "$HOME/.opencode/opencode" plugin opencode-zh-plugin --global
-cat "$TMP/.config/opencode/opencode.json"
+LD_PRELOAD="$HOME/.opencode/ld-musl-aarch64.so.1" \
+LD_LIBRARY_PATH="$HOME/.opencode" \
+SSL_CERT_FILE=/data/data/com.termux/files/usr/etc/tls/cert.pem \
+XDG_CONFIG_HOME="$TMP/.config" \
+"$HOME/.opencode/opencode" plugin opencode-zh-plugin --global
+cat "$TMP/.config/opencode/opencode.jsonc"
 cat "$TMP/.config/opencode/tui.json"
 ```
 
