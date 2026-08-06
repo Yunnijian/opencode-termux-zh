@@ -172,11 +172,12 @@ Run:
 TMP="$(mktemp -d "$HOME/oc-mouse-check-XXXXXX")"
 mkdir -p "$TMP/opencode"
 printf '{"plugin":[]}\n' > "$TMP/opencode/tui.json"
-XDG_CONFIG_HOME="$TMP" script -q -c "timeout 5 opencode --print-logs" "$HOME/oc-mouse-check.log" >/dev/null 2>&1
+XDG_CONFIG_HOME="$TMP" script -q -c "timeout 5 ./bin/opencode --print-logs" "$HOME/oc-mouse-check.log" >/dev/null 2>&1
 grep -aoP '\x1b\[\?100[0236][hl]' "$HOME/oc-mouse-check.log" | sort | uniq -c
 ```
 
 Expected: no lines containing `?1000h`, `?1002h`, `?1003h`, or `?1006h`.
+Run from the repository root so `./bin/opencode` is the worktree's modified wrapper.
 
 - [ ] **Step 7: Commit**
 
@@ -340,7 +341,7 @@ Run:
 
 ```bash
 TMP="$(mktemp -d "$HOME/oc-plugin-check-XXXXXX")"
-XDG_CONFIG_HOME="$TMP/.config" opencode plugin opencode-zh-plugin --global
+XDG_CONFIG_HOME="$TMP/.config" "$HOME/.opencode/opencode" plugin opencode-zh-plugin --global
 cat "$TMP/.config/opencode/opencode.json"
 cat "$TMP/.config/opencode/tui.json"
 ```
@@ -422,11 +423,12 @@ Run:
 TMP="$(mktemp -d "$HOME/oc-final-check-XXXXXX")"
 mkdir -p "$TMP/.config/opencode"
 printf '{"plugin":[]}\n' > "$TMP/.config/opencode/tui.json"
-XDG_CONFIG_HOME="$TMP/.config" script -q -c "timeout 5 opencode --print-logs" "$HOME/oc-final.log" >/dev/null 2>&1
+XDG_CONFIG_HOME="$TMP/.config" script -q -c "timeout 5 ./bin/opencode --print-logs" "$HOME/oc-final.log" >/dev/null 2>&1
 grep -aoP '\x1b\[\?100[0236][hl]' "$HOME/oc-final.log" | sort | uniq -c
 ```
 
 Expected: no `?1000h` / `?1002h` / `?1003h` / `?1006h` output.
+Run from the repository root so `./bin/opencode` is the worktree's modified wrapper.
 
 - [ ] **Step 5: Commit documentation**
 
