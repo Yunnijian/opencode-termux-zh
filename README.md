@@ -17,6 +17,17 @@
 
 `opencode-termux` packages OpenCode's official ARM64 musl build with the runtime required by Termux.
 
+## One-click install (Termux)
+
+```bash
+pkg install -y curl
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/Yunnijian/opencode-termux-zh/main/install.sh)"
+```
+
+The script installs Node.js, Git, and this package, then prints how to start
+OpenCode. The first launch downloads the OpenCode runtime and enables the
+Chinese plugin automatically.
+
 ## Install
 
 On Termux aarch64:
