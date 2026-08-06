@@ -150,6 +150,21 @@ try {
     run("patchelf", ["--set-interpreter", path.join(OPENCODE_DIR, "ld-musl-aarch64.so.1"), binary], { timeout: 15000 });
     for (const file of REQUIRED_FILES) fs.renameSync(path.join(extracted, file), path.join(OPENCODE_DIR, file));
     fs.writeFileSync(VERSION_FILE, `${VERSION}\n`, { mode: 0o600 });
+    try {
+      run("bash", [path.join(__dirname, "scripts", "install-zh-plugin.sh")], {
+        env: {
+          ...process.env,
+          OPENCODE_BIN: path.join(OPENCODE_DIR, "opencode"),
+          LD_PRELOAD: path.join(OPENCODE_DIR, "ld-musl-aarch64.so.1"),
+          LD_LIBRARY_PATH: OPENCODE_DIR,
+          SSL_CERT_FILE: CERTIFICATE_FILE,
+          OPENCODE_DISABLE_AUTOUPDATE: "1",
+        },
+        timeout: 120000,
+      });
+    } catch (error) {
+      console.warn(`Warning: could not install Chinese plugin: ${commandError(error)}`);
+    }
     success(`OpenCode ${VERSION} is ready`);
   } finally {
     fs.rmSync(staging, { recursive: true, force: true });

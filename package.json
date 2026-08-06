@@ -34,6 +34,7 @@
     "bin/",
     "install.js",
     "release-checksums.json",
+    "scripts/",
     "README.md"
   ],
   "engines": {
