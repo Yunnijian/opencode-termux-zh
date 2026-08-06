@@ -9,6 +9,8 @@ while [ -h "$SOURCE" ]; do
   [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
 done
 DIR="$(cd "$(dirname "$SOURCE")/.." && pwd)"
+source "$DIR/scripts/termux-mouse-default.sh"
+opencode_termux_default_mouse
 OPENCODE_DIR="$HOME/.opencode"
 CURRENT="$(node -e 'console.log(require(process.argv[1]).version)' "$DIR/package.json" 2>/dev/null)"
 INSTALLED_VERSION="$(cat "$OPENCODE_DIR/.opencode-termux-version" 2>/dev/null || true)"
