@@ -156,8 +156,7 @@ try {
         env: {
           ...process.env,
           OPENCODE_BIN: path.join(OPENCODE_DIR, "opencode"),
-          LD_PRELOAD: path.join(OPENCODE_DIR, "ld-musl-aarch64.so.1"),
-          LD_LIBRARY_PATH: OPENCODE_DIR,
+          OPENCODE_DIR,
           SSL_CERT_FILE: CERTIFICATE_FILE,
           OPENCODE_DISABLE_AUTOUPDATE: "1",
         },
