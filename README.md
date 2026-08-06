@@ -37,11 +37,11 @@ Chinese plugin automatically.
 If Termux is installed on an adb-connected device, run:
 
 ```bash
-adb shell su -c 'curl -fsSL https://raw.githubusercontent.com/Yunnijian/opencode-termux-zh/main/install.sh -o /data/local/tmp/opencode-zh-install.sh && bash /data/local/tmp/opencode-zh-install.sh'
+adb shell su -c 'PREFIX=/data/data/com.termux/files/usr; UID=$(stat -c %u $PREFIX/..); curl -fsSL https://raw.githubusercontent.com/Yunnijian/opencode-termux-zh/main/install.sh -o /data/local/tmp/opencode-zh-install.sh; su -g $UID -G 3003 $UID -c "env PREFIX=$PREFIX HOME=$PREFIX/../home PATH=$PREFIX/bin:/system/bin LD_LIBRARY_PATH=$PREFIX/lib TMPDIR=$PREFIX/tmp $PREFIX/bin/bash /data/local/tmp/opencode-zh-install.sh"'
 ```
 
-The installer detects root and re-runs itself as the Termux user with the
-`inet` group, which is required for DNS/network access on Android.
+The `-G 3003` (`inet`) group is required for DNS/network access on Android;
+without it, package installation fails with "Could not resolve host".
 
 This fork disables the upstream npm auto-update so the installed wrapper
 keeps the Termux touch/IME and Chinese plugin changes.
