@@ -151,7 +151,8 @@ try {
     for (const file of REQUIRED_FILES) fs.renameSync(path.join(extracted, file), path.join(OPENCODE_DIR, file));
     fs.writeFileSync(VERSION_FILE, `${VERSION}\n`, { mode: 0o600 });
     try {
-      run("bash", [path.join(__dirname, "scripts", "install-zh-plugin.sh")], {
+      execFileSync("bash", [path.join(__dirname, "scripts", "install-zh-plugin.sh")], {
+        stdio: "inherit",
         env: {
           ...process.env,
           OPENCODE_BIN: path.join(OPENCODE_DIR, "opencode"),

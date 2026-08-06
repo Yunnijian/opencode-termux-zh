@@ -315,7 +315,8 @@ Modify `install.js`: after `fs.writeFileSync(VERSION_FILE, ...)` and before `suc
 
 ```js
 try {
-  run("bash", [path.join(__dirname, "scripts", "install-zh-plugin.sh")], {
+  execFileSync("bash", [path.join(__dirname, "scripts", "install-zh-plugin.sh")], {
+    stdio: "inherit",
     env: {
       ...process.env,
       OPENCODE_BIN: path.join(OPENCODE_DIR, "opencode"),

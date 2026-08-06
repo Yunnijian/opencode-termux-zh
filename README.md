@@ -115,7 +115,8 @@ commands, and AI replies/reasoning. TUI hardcoded strings that OpenCode does
 not expose to plugins remain English.
 
 To disable it, remove `"opencode-zh-plugin"` from the `plugin` arrays in
-`~/.config/opencode/opencode.json` and `~/.config/opencode/tui.json`.
+`~/.config/opencode/opencode.json` (or `opencode.jsonc`) and
+`~/.config/opencode/tui.json`.
 
 ## Automated releases
 
