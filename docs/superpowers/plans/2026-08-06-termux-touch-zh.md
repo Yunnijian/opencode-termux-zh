@@ -437,10 +437,12 @@ git add README.md
 git commit -m "docs: document Termux touch input and Chinese mode"
 ```
 
-- [ ] **Step 6: Push to GitHub**
+- [ ] **Step 6: Merge to main and push to GitHub**
 
 ```bash
+git checkout main
+git merge termux-touch-zh
 git push origin main
 ```
 
-Expected: `main` updated on `origin` (`https://github.com/C04-wq/opencode-termux.git`). If authentication fails, stop and report the exact error; do not force-push.
+Expected: `main` updated on `origin` (`https://github.com/C04-wq/opencode-termux.git`). This is the final step after the whole-branch review is clean; run it from the main checkout, not from a feature-branch subagent. If authentication fails, stop and report the exact error; do not force-push.
