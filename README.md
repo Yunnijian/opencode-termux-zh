@@ -24,6 +24,10 @@ pkg install -y curl
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/Yunnijian/opencode-termux-zh/main/install.sh)"
 ```
 
+If `curl` fails with a library mismatch like
+`cannot locate symbol "SSL_set_quic_tls_transport_params"`, run
+`pkg update -y && pkg upgrade -y` first, then rerun the command.
+
 The script installs Node.js, Git, and this package, then prints how to start
 OpenCode. The first launch downloads the OpenCode runtime and enables the
 Chinese plugin automatically.

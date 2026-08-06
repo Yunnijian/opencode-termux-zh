@@ -15,6 +15,13 @@ if ! command -v pkg >/dev/null 2>&1; then
   exit 1
 fi
 
+if [ "${SKIP_UPGRADE:-0}" != "1" ]; then
+  echo "◇ Refreshing Termux package index…"
+  pkg update -y
+  echo "◇ Upgrading Termux packages (fixes curl/OpenSSL library mismatches)…"
+  pkg upgrade -y
+fi
+
 echo "◇ Installing Termux dependencies (nodejs, git, curl)…"
 pkg install -y nodejs git curl
 
