@@ -92,6 +92,31 @@ opencode
   └─ Run ~/.opencode/opencode
 ```
 
+## Termux touch input
+
+Termux only shows the soft keyboard on tap while a TUI app is not capturing
+the mouse. OpenCode captures the mouse by default, so this package exports
+`OPENCODE_DISABLE_MOUSE=1` unless you explicitly opt in.
+
+To re-enable mouse capture:
+
+```json
+// ~/.config/opencode/tui.json
+{ "mouse": true }
+```
+
+or run opencode with `OPENCODE_DISABLE_MOUSE=0 opencode`.
+
+## Chinese mode (中文模式)
+
+Installation automatically registers the `opencode-zh-plugin` plugin in the
+global config. It localizes the TUI home screen, sidebar title, slash
+commands, and AI replies/reasoning. TUI hardcoded strings that OpenCode does
+not expose to plugins remain English.
+
+To disable it, remove `"opencode-zh-plugin"` from the `plugin` arrays in
+`~/.config/opencode/opencode.json` and `~/.config/opencode/tui.json`.
+
 ## Automated releases
 
 The [Build and publish Termux package](.github/workflows/auto-update.yml) workflow runs every six hours and can also be started manually.
