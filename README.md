@@ -32,6 +32,20 @@ The script installs Node.js, Git, and this package, then prints how to start
 OpenCode. The first launch downloads the OpenCode runtime and enables the
 Chinese plugin automatically.
 
+### Install via adb (rooted device)
+
+If Termux is installed on an adb-connected device, run:
+
+```bash
+adb shell su -c 'curl -fsSL https://raw.githubusercontent.com/Yunnijian/opencode-termux-zh/main/install.sh -o /data/local/tmp/opencode-zh-install.sh && bash /data/local/tmp/opencode-zh-install.sh'
+```
+
+The installer detects root and re-runs itself as the Termux user with the
+`inet` group, which is required for DNS/network access on Android.
+
+This fork disables the upstream npm auto-update so the installed wrapper
+keeps the Termux touch/IME and Chinese plugin changes.
+
 ## Install
 
 On Termux aarch64:

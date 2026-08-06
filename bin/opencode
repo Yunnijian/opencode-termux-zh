@@ -2,6 +2,13 @@
 set -o pipefail
 export OPENCODE_DISABLE_AUTOUPDATE=1
 
+export HOME="${HOME:-/data/data/com.termux/files/home}"
+export PREFIX="${PREFIX:-/data/data/com.termux/files/usr}"
+export PATH="$PREFIX/bin:$PATH"
+export LD_LIBRARY_PATH="$PREFIX/lib"
+export TMPDIR="${TMPDIR:-$PREFIX/tmp}"
+mkdir -p "$TMPDIR"
+
 SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SOURCE" ]; do
   DIR="$(cd "$(dirname "$SOURCE")" && pwd)"
@@ -27,19 +34,8 @@ if [ ! -f "$OPENCODE_DIR/opencode" ] || [ ! -f "$OPENCODE_DIR/ld-musl-aarch64.so
   install_opencode || exit $?
 fi
 
-LATEST="$(timeout 10 npm view opencode-termux version 2>/dev/null || true)"
-
-if [[ "$LATEST" =~ ^[0-9]+\.[0-9]+\.[0-9]+([-.][0-9A-Za-z.-]+)?$ ]] && [ "$CURRENT" != "$LATEST" ]; then
-  printf '  ◇ Updating OpenCode…\n'
-  if npm install -g "opencode-termux@${LATEST}" --ignore-scripts --silent; then
-    # Re-enter through npm's (now updated) command instead of using stale package files.
-    exec "$(command -v opencode)" "$@"
-  fi
-  echo "Warning: update failed; using the installed version." >&2
-fi
-
 export LD_PRELOAD="$OPENCODE_DIR/ld-musl-aarch64.so.1"
-export LD_LIBRARY_PATH="$OPENCODE_DIR"
+export LD_LIBRARY_PATH="$OPENCODE_DIR:$LD_LIBRARY_PATH"
 export SSL_CERT_FILE=/data/data/com.termux/files/usr/etc/tls/cert.pem
 
 exec "$OPENCODE_DIR/opencode" "$@"

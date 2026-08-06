@@ -7,6 +7,26 @@ set -euo pipefail
 # Usage:
 #   bash -c "$(curl -fsSL https://raw.githubusercontent.com/Yunnijian/opencode-termux-zh/main/install.sh)"
 
+export PREFIX="${PREFIX:-/data/data/com.termux/files/usr}"
+export HOME="${HOME:-/data/data/com.termux/files/home}"
+export PATH="$PREFIX/bin:$PATH"
+export LD_LIBRARY_PATH="$PREFIX/lib"
+export TMPDIR="${TMPDIR:-$PREFIX/tmp}"
+mkdir -p "$TMPDIR"
+
+if [ "$(id -u)" = "0" ]; then
+  TERMUX_UID="$(stat -c %u "$PREFIX/..")"
+  if [ -f "$0" ]; then
+    echo "◇ Detected root; re-running as Termux user (uid $TERMUX_UID, inet group)…"
+    exec su -g "$TERMUX_UID" -G 3003 "$TERMUX_UID" -c \
+      "env PREFIX='$PREFIX' HOME='$HOME' PATH='$PREFIX/bin:/system/bin' LD_LIBRARY_PATH='$PREFIX/lib' TMPDIR='$TMPDIR' '$PREFIX/bin/bash' '$0'"
+  else
+    echo "Error: pkg refuses to run as root. Download this script to a file and run:" >&2
+    echo "  su -g $TERMUX_UID -G 3003 $TERMUX_UID -c 'bash /data/local/tmp/opencode-zh-install.sh'" >&2
+    exit 1
+  fi
+fi
+
 REPO_URL="${REPO_URL:-https://github.com/Yunnijian/opencode-termux-zh.git}"
 INSTALL_DIR="${INSTALL_DIR:-$HOME/opencode-termux-zh}"
 
