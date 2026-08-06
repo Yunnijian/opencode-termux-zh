@@ -13,7 +13,7 @@ fi
 
 run_opencode() {
   if [ -f "$OPENCODE_DIR/ld-musl-aarch64.so.1" ]; then
-    env LD_PRELOAD="$OPENCODE_DIR/ld-musl-aarch64.so.1" LD_LIBRARY_PATH="$OPENCODE_DIR" "$OPENCODE_BIN" "$@"
+    env -u LD_PRELOAD LD_LIBRARY_PATH="$OPENCODE_DIR" "$OPENCODE_BIN" "$@"
   else
     "$OPENCODE_BIN" "$@"
   fi

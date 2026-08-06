@@ -154,7 +154,7 @@ try {
     run("patchelf", ["--set-interpreter", interpreter, binary], { timeout: 15000 });
     execFileSync(binary, ["--version"], {
       stdio: "pipe",
-      env: { ...process.env, LD_PRELOAD: interpreter, LD_LIBRARY_PATH: extracted, SSL_CERT_FILE: CERTIFICATE_FILE },
+      env: { ...process.env, LD_PRELOAD: "", LD_LIBRARY_PATH: extracted, SSL_CERT_FILE: CERTIFICATE_FILE },
       timeout: 30000,
     });
 

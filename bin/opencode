@@ -13,6 +13,7 @@ export HOME="${HOME:-$(dirname "$PREFIX")/home}"
 export PATH="$PREFIX/bin:$PATH"
 export LD_LIBRARY_PATH="$PREFIX/lib"
 export TMPDIR="${TMPDIR:-$PREFIX/tmp}"
+unset LD_PRELOAD
 mkdir -p "$TMPDIR"
 
 SOURCE="${BASH_SOURCE[0]}"
@@ -40,7 +41,6 @@ if [ ! -f "$OPENCODE_DIR/opencode" ] || [ ! -f "$OPENCODE_DIR/ld-musl-aarch64.so
   install_opencode || exit $?
 fi
 
-export LD_PRELOAD="$OPENCODE_DIR/ld-musl-aarch64.so.1"
 export LD_LIBRARY_PATH="$OPENCODE_DIR:$LD_LIBRARY_PATH"
 export SSL_CERT_FILE="$PREFIX/etc/tls/cert.pem"
 
